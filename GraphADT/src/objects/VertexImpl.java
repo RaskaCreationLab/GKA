@@ -8,9 +8,12 @@ public class VertexImpl implements Vertex{
 		this.name = name;
 	}
 	
+	public static Vertex valueOf(String name) {
+		return new VertexImpl(name);
+	}
+	
 	@Override
 	public String getName() {
 		return name;
 	}
-
 }

@@ -1,7 +1,6 @@
 package objects;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class GraphImpl implements Graph{
@@ -18,84 +17,57 @@ public class GraphImpl implements Graph{
 	 *  rows	3 | f | f | f
 	 *  ---> one edge from 2 to 1
 	 */
-	private boolean[][] edgeMatrix;
-	private HashMap<String, Integer>[][] edgeAttrMatrix;
+	//boolean[source][target]
+	private ArrayList<ArrayList<Boolean>> edgeMatrix;
+	private ArrayList<ArrayList<HashMap<String, Integer>>> edgeAttrMatrix;
 	
-	//GraphImpl :: Vertex -> Graph :: (vertex)
-	GraphImpl(Vertex vertex) {
-		vertexList.add(vertex);
-		vertexAttrList.add(new HashMap<String, Integer>());
-		constructEdgeMatrix();	//generate EdgeMatrix	
+	//GraphImpl :: Graph x Vertex -> Graph :: (vertex)
+	private GraphImpl(Vertex vertex) {
+		vertexList = new ArrayList<Vertex>();
+		vertexAttrList = new ArrayList<HashMap<String, Integer>>();
+		edgeMatrix = new ArrayList<ArrayList<Boolean>>();
+		edgeAttrMatrix = new ArrayList<ArrayList<HashMap<String, Integer>>>();
+		
+		addVertex(vertex);
 	}
 	
-	//constructEdgeMatrix :: -> Graph
-	//constructs a new EdgeMatrix for this graph adding a row and a column
-	private void constructEdgeMatrix() {
-		int len = vertexList.size();
-		edgeMatrix = new boolean[len][len];
-		edgeAttrMatrix = new HashMap[len][len];
-		for (int row = 0; row <= len; row++) {
-			for (int col = 0; col <= len; col++) {
-				edgeMatrix[row][col] = false;
-				edgeAttrMatrix[row][col] = new HashMap<String, Integer>();
-			}
-		}
+	public static Graph valueOf(Vertex vertex) {
+		return new GraphImpl(vertex);
 	}
 	
-	//updateMatrixOnInsert :: int -> Graph :: (index)
+	//updateMatrixOnInsert :: Graph x int -> Graph :: (index)
 	//updates Matrix after deleteVertex (removes the corresponding rows and colunms)
 	private void updateMatrixOnDelete(int index) {
-		int len = vertexList.size();
-		boolean[][] newMatrix = new boolean[len-1][len-1];
-		HashMap<String, Integer>[][] attrMap = new HashMap[len-1][len-1];
-		for(int row = 0; row<index; row++) {
-			for(int col = 0; col<index; col++) {
-				newMatrix[row][col] = edgeMatrix[row][col];
-				attrMap[row][col] = edgeAttrMatrix[row][col];
-			}	//copy old matrix values before index of removed item
-			for(int col = index+1; col <= len; col++) {
-				newMatrix[row][col-1] = edgeMatrix[row][col];
-				attrMap[row][col-1] = edgeAttrMatrix[row][col];
-			}   //shift all items in column after index 1 to the left
-		}
-		//ignore row of index
-		for(int row = index+1; row <= len; row++) {
-			for(int col = 0; col < index; col ++) {
-				newMatrix[row-1][col] = edgeMatrix[row][col];
-				attrMap[row-1][col] = edgeAttrMatrix[row][col];
-			}	//shift all items in row after index 1 up
-			for(int col = index+1; col <= len; col++) {
-				newMatrix[row-1][col-1] = edgeMatrix[row][col];
-				attrMap[row-1][col-1] = edgeAttrMatrix[row][col];
-			}	//shift all items in row and column after index 1 to the left and up
-		}
-		edgeMatrix = newMatrix; //save new Matrix
-		edgeAttrMatrix = attrMap;
+		// remove vertex as source from edgeMatrix
+		edgeMatrix.remove(index);
+		edgeAttrMatrix.remove(index);
+		// remove vertex as target from edgeMatrix
+		for(ArrayList<Boolean> row : edgeMatrix)
+			row.remove(index);
+		for(ArrayList<HashMap<String, Integer>> row : edgeAttrMatrix) 
+			row.remove(index);
 	}
 	
-	//updateMatrixOnInsert :: -> Graph
+	//updateMatrixOnInsert :: Graph -> Graph
 	//updates a EdgeMatrix for this graph adding a row and a column
 	private void updateMatrixOnInsert() {
-		int len = vertexList.size();
-		boolean[][] newMatrix = new boolean[len][len];
-		HashMap<String, Integer>[][] attrMap = new HashMap[len][len];
-		for(int row = 0; row<len; row++) {
-			for(int col = 0; col<len; col++) {
-				newMatrix[row][col] = edgeMatrix[row][col];
-				attrMap[row][col] = edgeAttrMatrix[row][col];
-			}	//save old edges
-			newMatrix[row][len] = false;
-			attrMap[row][len] = new HashMap<String, Integer>();
-		} 	//no edges for the new vertex (last column)
-		for(int col = 0; col <= len; col++) {
-			newMatrix[len][col] = false;
-			attrMap[len][col] = new HashMap<String, Integer>();
-		}	//no edges for the new vertex (last row)
-		edgeMatrix = newMatrix; //save new Matrix
-		edgeAttrMatrix = attrMap;
+		int lastIndex = vertexList.size() - 1;
+		//add a column for the new vertex being target;
+		for(ArrayList<Boolean> row : edgeMatrix)
+			row.add(false);
+		for(ArrayList<HashMap<String, Integer>> row : edgeAttrMatrix)
+			row.add(new HashMap<String, Integer>());
+		//add a row for the new vertex being source;
+		edgeMatrix.add(new ArrayList<Boolean>());
+		edgeAttrMatrix.add(new ArrayList<HashMap<String, Integer>>());
+		//fill the new row with false-values;
+		for(int i = lastIndex; i > 0; i--) {
+			edgeMatrix.get(lastIndex).add(false);
+			edgeAttrMatrix.get(lastIndex).add(new HashMap<String, Integer>());
+		}
 	}
 
-	//addVertex :: Vertex -> Graph :: (vertex)
+	//addVertex :: Graph x Vertex -> Graph :: (vertex)
 	//add a vertex to the graph
 	@Override
 	public void addVertex(Vertex vertex) {
@@ -106,7 +78,7 @@ public class GraphImpl implements Graph{
 		}
 	}
 	
-	//deleteVertex :: Vertex -> Graph :: (vertex)
+	//deleteVertex :: Graph x Vertex -> Graph :: (vertex)
 	//removes a vertex from graph
 	@Override
 	public void deleteVertex(Vertex vertex) {
@@ -118,40 +90,40 @@ public class GraphImpl implements Graph{
 			}
 	}
 
-	//addEdge :: Vertex x Vertex -> Graph :: (vSource, vTarget)
+	//addEdge :: Graph x Vertex x Vertex -> Graph :: (vSource, vTarget)
 	//adds an edge that is directed from vSource to vTarget to the graph
 	@Override
 	public void addEdge(Vertex vSource, Vertex vTarget) {
 		int sIndex = vertexList.indexOf(vSource);
 		int tIndex = vertexList.indexOf(vTarget); 	//get indices of vertices
 		if(sIndex != -1 && tIndex != -1) {			//when both vertices exist in this graph, add the edge to the edgeMatrix
-			edgeMatrix[sIndex][tIndex] = true;
+			edgeMatrix.get(sIndex).set(tIndex, true);
 		}
 	}
 
-	//deleteEdge :: Vertex -> Vertex -> Graph :: (vSource, vTarget)
+	//deleteEdge :: Graph x Vertex -> Vertex -> Graph :: (vSource, vTarget)
 	//removes the directed edge from vSource to vTarget from graph
 	@Override
 	public void deleteEdge(Vertex vSource, Vertex vTarget) {
 		int sIndex = vertexList.indexOf(vSource);
-		int tIndex = vertexList.indexOf(vTarget);	//get vertex-indices
+		int tIndex = vertexList.indexOf(vTarget);		//get vertex-indices
 		if(sIndex != -1 && tIndex != -1) {
-			edgeMatrix[sIndex][tIndex] = false;		//delete edge
+			edgeMatrix.get(sIndex).set(tIndex, false);	//delete edge
 		}
 	}
 
-	//setAtE :: Vertex x Vertex x String x int -> Graph :: (vSource, vTarget, attr_name, value)
+	//setAtE :: Graph x Vertex x Vertex x String x int -> Graph :: (vSource, vTarget, attr_name, value)
 	//sets the attribute >attr_name< to >value< for the edge vSource -> vTarget
 	@Override
 	public void setAtE(Vertex vSource, Vertex vTarget, String attr_name, int value) {
 		int sIndex = vertexList.indexOf(vSource);
 		int tIndex = vertexList.indexOf(vTarget);	//get vertex-indices
-		if(sIndex != -1 && tIndex != -1 && edgeMatrix[sIndex][tIndex] == true) {	//check if the needed edge exists
-			edgeAttrMatrix[sIndex][tIndex].put(attr_name, value);					//and add/overwrite attribute attr_name with value
+		if(sIndex != -1 && tIndex != -1 && edgeMatrix.get(sIndex).get(tIndex) == true) {	//check if the needed edge exists
+			edgeAttrMatrix.get(sIndex).get(tIndex).put(attr_name, value);					//and add/overwrite attribute attr_name with value
 		}
 	}
 
-	//setAtV :: Vertex x String x int -> Graph :: (vertex, attr_name, value)
+	//setAtV :: Graph x Vertex x String x int -> Graph :: (vertex, attr_name, value)
 	//sets the attribute >attr_name< to >value< for >vertex<
 	@Override
 	public void setAtV(Vertex vertex, String attr_name, int value) {
@@ -166,52 +138,124 @@ public class GraphImpl implements Graph{
 		// TODO Auto-generated method stub
 		
 	}
-
+	//getIncident :: Graph x Vertex -> ArrayList<Vertex> :: (vertex)
+	//get all edges that are incident to the vertex in an ArrayList as pairs (source, target)
 	@Override
 	public ArrayList<Vertex> getIncident(Vertex vertex) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
+		int index = vertexList.indexOf(vertex) ;
+		if (index != -1) {
+			for(int i = 0; i < vertexList.size(); i++) 
+			{
+				if(edgeMatrix.get(index).get(i)) {//if there is an edge to another vertex, add the sourcevertex and the  targetvertex to resultList
+					resultList.add(vertex);
+					resultList.add(vertexList.get(i));
+				}
+				if(edgeMatrix.get(i).get(index)) {//if there is an edge from another vertex, add the sourcevertex and the targetvertex 
+					resultList.add(vertexList.get(i));
+					resultList.add(vertex);
+				}
+			}
+		}
+		return resultList;
 	}
 
+	//getAdjacent :: Graph x Vertex -> ArrayList<Vertex> :: (vertex)
+	//returns all vertices, that are adjacent to >vertex<, in an ArrayList
 	@Override
 	public ArrayList<Vertex> getAdjacent(Vertex vertex) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
+		int index = vertexList.indexOf(vertex) ;
+		if (index != -1) {
+			for(int i = 0; i < vertexList.size(); i++) 
+			{
+				if(edgeMatrix.get(index).get(i) || edgeMatrix.get(i).get(index)) //if there is an edge to a vertex, add that vertex to my resultList
+					resultList.add(vertexList.get(i));
+				
+			}
+		}
+		return resultList;
 	}
 
+	//getTarget :: Graph x Vertex -> ArrayList<Vertex> :: (vertex)
+	//returns all vertices, that are targetable from >vertex<, in an ArrayList
 	@Override
 	public ArrayList<Vertex> getTarget(Vertex vertex) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
+		int index = vertexList.indexOf(vertex) ;
+		if (index != -1) {
+			for(int i = 0; i < vertexList.size(); i++) 
+			{
+				if(edgeMatrix.get(i).get(index)) //if there is an edge to a vertex and that vertex is a targetVertex, add that vertex to my resultList
+					resultList.add(vertexList.get(i));
+				
+			}
+		}
+		return resultList;
 	}
 
+	//getSource :: Graph x Vertex -> ArrayList<Vertex> :: (vertex)
+	//returns all vertices, that >vertex< can be reached from, in an ArrayList
 	@Override
 	public ArrayList<Vertex> getSource(Vertex vertex) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
+		int index = vertexList.indexOf(vertex) ;
+		if (index != -1) {
+			for(int i = 0; i < vertexList.size(); i++) 
+			{
+				if(edgeMatrix.get(i).get(index)) //if there is an edge to a vertex, add that vertex to the resultList
+					resultList.add(vertexList.get(i));
+				
+			}
+		}
+		return resultList;
 	}
 
+	//getEdges :: Graph -> ArrayList<Vertex> :: 
+	//returns all edges in an ArrayList in pairs (source, target)
 	@Override
 	public ArrayList<Vertex> getEdges() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
+		for(int i = 0; i < vertexList.size(); i++) {
+			for(int j = 0; j < vertexList.size(); j++) {
+				if(edgeMatrix.get(j).get(i)) {//if there is an edge to a vertex as a target, that vertex to my resultList
+					resultList.add(vertexList.get(j));
+					resultList.add(vertexList.get(i));
+				}
+				if(edgeMatrix.get(i).get(j)) {
+					resultList.add(vertexList.get(i));
+					resultList.add(vertexList.get(j));
+				}
+			}
+		}
+		return resultList;
 	}
 
+	//getVertexes :: Graph -> ArrayList<Vertex> ::
+	//returns all vertices as an ArrayList
 	@Override
 	public ArrayList<Vertex> getVertexes() {
-		// TODO Auto-generated method stub
-		return null;
+		return vertexList;
 	}
 
+	//getValE :: Graph x Vertex x Vertex x String -> int :: (vSource, vTarget, attr_ame)
+	//returns value of a specific edge
 	@Override
 	public int getValE(Vertex vSource, Vertex vTarget, String attr_name) {
-		// TODO Auto-generated method stub
+		int sIndex = vertexList.indexOf(vSource);
+		int tIndex = vertexList.indexOf(vTarget);
+		if(edgeMatrix.get(sIndex).get(tIndex))
+			return edgeAttrMatrix.get(sIndex).get(tIndex).get(attr_name);
 		return 0;
 	}
 
+	//getValV :: Graph x Vertex x String -> int :: (vertex, attr_ame)
+	//returns value of a specific vertex
 	@Override
 	public int getValV(Vertex vertex, String attr_name) {
-		// TODO Auto-generated method stub
+		int index = vertexList.indexOf(vertex);
+		if(index != -1)
+			return vertexAttrList.get(index).get(attr_name);
 		return 0;
 	}
 }
