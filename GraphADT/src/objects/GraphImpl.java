@@ -1,9 +1,16 @@
 package objects;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GraphImpl implements Graph{
+	
+	private static int ERROR_VALUE = -999999999;
 	
 	private ArrayList<Vertex> vertexList;
 	private ArrayList<HashMap<String, Integer>> vertexAttrList;
@@ -61,7 +68,7 @@ public class GraphImpl implements Graph{
 		edgeMatrix.add(new ArrayList<Boolean>());
 		edgeAttrMatrix.add(new ArrayList<HashMap<String, Integer>>());
 		//fill the new row with false-values;
-		for(int i = lastIndex; i > 0; i--) {
+		for(int i = lastIndex; i >= 0; i--) {
 			edgeMatrix.get(lastIndex).add(false);
 			edgeAttrMatrix.get(lastIndex).add(new HashMap<String, Integer>());
 		}
@@ -82,8 +89,8 @@ public class GraphImpl implements Graph{
 	//removes a vertex from graph
 	@Override
 	public void deleteVertex(Vertex vertex) {
-		if(vertexList.size() <= 1) {
-			int index = vertexList.indexOf(vertex);
+		int index = vertexList.indexOf(vertex);
+		if(vertexList.size() > 1 && index != -1) {
 			updateMatrixOnDelete(index); //remove all edges of this vertex
 			vertexList.remove(index);
 			vertexAttrList.remove(index);
@@ -135,9 +142,34 @@ public class GraphImpl implements Graph{
 
 	@Override
 	public void exportG(String filename) {
-		// TODO Auto-generated method stub
-		
+		try {
+			File file = new File(System.getProperty("user.dir")+"\\"+filename+".graph");
+			
+			FileWriter fw = new FileWriter(file.getAbsolutePath());
+			System.out.println(file.getAbsolutePath());
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			bw.write("#gerichtet");
+			ArrayList<Vertex> edgeList = getEdges();
+			for(int i = 0; i < edgeList.size(); i = i+2) {
+				bw.newLine();
+				Vertex sVertex = edgeList.get(i);
+				Vertex tVertex = edgeList.get(i+1);
+				String line = sVertex.getName() + "," + tVertex.getName();
+				int sIndex = vertexList.indexOf(sVertex);
+				int tIndex = vertexList.indexOf(tVertex);
+				for(Map.Entry<String, Integer> entry: edgeAttrMatrix.get(sIndex).get(tIndex).entrySet()) {
+					line = line.concat(","+entry.getKey()+" "+entry.getValue());
+				}
+				bw.write(line);
+				
+			}
+			
+
+			bw.close();
+		} catch (IOException e) {}
 	}
+	
 	//getIncident :: Graph x Vertex -> ArrayList<Vertex> :: (vertex)
 	//get all edges that are incident to the vertex in an ArrayList as pairs (source, target)
 	@Override
@@ -186,7 +218,7 @@ public class GraphImpl implements Graph{
 		if (index != -1) {
 			for(int i = 0; i < vertexList.size(); i++) 
 			{
-				if(edgeMatrix.get(i).get(index)) //if there is an edge to a vertex and that vertex is a targetVertex, add that vertex to my resultList
+				if(edgeMatrix.get(index).get(i)) //if there is an edge to a vertex and that vertex is a targetVertex, add that vertex to my resultList
 					resultList.add(vertexList.get(i));
 				
 			}
@@ -216,15 +248,11 @@ public class GraphImpl implements Graph{
 	@Override
 	public ArrayList<Vertex> getEdges() {
 		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
-		for(int i = 0; i < vertexList.size(); i++) {
-			for(int j = 0; j < vertexList.size(); j++) {
-				if(edgeMatrix.get(j).get(i)) {//if there is an edge to a vertex as a target, that vertex to my resultList
-					resultList.add(vertexList.get(j));
-					resultList.add(vertexList.get(i));
-				}
-				if(edgeMatrix.get(i).get(j)) {
-					resultList.add(vertexList.get(i));
-					resultList.add(vertexList.get(j));
+		for(int row = 0; row < vertexList.size(); row++) {
+			for(int col = 0; col < vertexList.size(); col++) {
+				if(edgeMatrix.get(row).get(col)) {
+					resultList.add(vertexList.get(row));
+					resultList.add(vertexList.get(col));
 				}
 			}
 		}
@@ -244,9 +272,9 @@ public class GraphImpl implements Graph{
 	public int getValE(Vertex vSource, Vertex vTarget, String attr_name) {
 		int sIndex = vertexList.indexOf(vSource);
 		int tIndex = vertexList.indexOf(vTarget);
-		if(edgeMatrix.get(sIndex).get(tIndex))
+		if(sIndex != -1 && tIndex != -1 && edgeMatrix.get(sIndex).get(tIndex) && edgeAttrMatrix.get(sIndex).get(tIndex).containsKey(attr_name))
 			return edgeAttrMatrix.get(sIndex).get(tIndex).get(attr_name);
-		return 0;
+		return ERROR_VALUE;
 	}
 
 	//getValV :: Graph x Vertex x String -> int :: (vertex, attr_ame)
@@ -254,8 +282,8 @@ public class GraphImpl implements Graph{
 	@Override
 	public int getValV(Vertex vertex, String attr_name) {
 		int index = vertexList.indexOf(vertex);
-		if(index != -1)
+		if(index != -1 && vertexAttrList.get(index).containsKey(attr_name))
 			return vertexAttrList.get(index).get(attr_name);
-		return 0;
+		return ERROR_VALUE;
 	}
 }
