@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Factory {
 	
-	private static String[] names;
+	private static ArrayList<String> names;
 	
 	public static String getDirectory() {
 		return System.getProperty("user.dir");
@@ -24,23 +24,20 @@ public class Factory {
 	public static Graph importG(String filename) {
 		ArrayList<String> lines = new ArrayList<String>();
 		try (BufferedReader br = new BufferedReader(new FileReader(getDirectory()+ "\\" +filename+".graph")))
-		{
-			
+		{			
 			String currentLine;
 			while((currentLine = br.readLine()) != null) {
 				lines.add(currentLine);
-			}
-			
+			}			
 			if(lines.isEmpty()) 
 				return null;
-
 		} catch (IOException e) {
 			return null;
 		} 
 		return importCreateG(lines, names);
 	}
 	
-	static Graph importCreateG(ArrayList<String> lines, String[] names) {
+	static Graph importCreateG(ArrayList<String> lines, ArrayList<String> names) {
 		boolean isDirected;
 		Graph g = null;
 		if(lines.get(0) == "#gerichtet")
@@ -63,13 +60,12 @@ public class Factory {
 			}
 			g.addEdge(v1, v2);
 			for(int j = 2; j < splitLine.length; j++) {
-				g.setAtE(v1, v2, names[j-2], Integer.parseInt(splitLine[j]));
+				g.setAtE(v1, v2, names.get(j-2), Integer.parseInt(splitLine[j]));
 			}
 			if(isDirected == false) {
 				g.addEdge(v2, v1);
 				for(int j = 2; j < splitLine.length; j++) {
-					String splitAttr[] = splitLine[j].split(" ");
-					g.setAtE(v2, v1, splitAttr[0], Integer.parseInt(splitAttr[1]));
+					g.setAtE(v2, v1, names.get(j-2), Integer.parseInt(splitLine[j]));
 				}
 			}
 		}
