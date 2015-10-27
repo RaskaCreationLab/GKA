@@ -34,7 +34,7 @@ public class GraphImplTest {
 		assertEquals(3, g.getVertexes().size());
 		assertEquals(false,g.getVertexes().contains(v3));
 		assertEquals(true,g.getVertexes().contains(vspecial2));
-		assertEquals(false,g.getVertexes().contains(Factory.createV("L3@-t")));
+		assertEquals(true,g.getVertexes().contains(Factory.createV("L3@-t")));
 		//null-Wert muss hinzugefügt werden können
 		g.addVertex(vnull);
 		//Muss null-Werte akzeptieren

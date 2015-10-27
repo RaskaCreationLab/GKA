@@ -1,7 +1,10 @@
 package objects;
 
+import java.util.HashMap;
+
 public class VertexImpl implements Vertex{
 	
+	private static HashMap<String, Vertex> h = new HashMap<String, Vertex>();
 	private String name;
 	
 	VertexImpl(String name) {
@@ -9,7 +12,9 @@ public class VertexImpl implements Vertex{
 	}
 	
 	public static Vertex valueOf(String name) {
-		return new VertexImpl(name);
+		if(!h.containsKey(name))
+			h.put(name, new VertexImpl(name));
+		return h.get(name);
 	}
 	
 	@Override
