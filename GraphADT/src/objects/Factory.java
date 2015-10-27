@@ -4,20 +4,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Factory {
+	
+	private static String[] names;
 	
 	public static String getDirectory() {
 		return System.getProperty("user.dir");
 	}
 	
-	private static HashMap<String, Vertex> h = new HashMap<String, Vertex>();
-	
 	public static Vertex createV(String name) {
-		if(!h.containsKey(name))
-			h.put(name, VertexImpl.valueOf(name));
-		return h.get(name);
+		return VertexImpl.valueOf(name);
 	}
 	
 	public static Graph createG(Vertex vertex) {
@@ -40,10 +37,10 @@ public class Factory {
 		} catch (IOException e) {
 			return null;
 		} 
-		return importCreateG(lines);
+		return importCreateG(lines, names);
 	}
 	
-	static Graph importCreateG(ArrayList<String> lines) {
+	static Graph importCreateG(ArrayList<String> lines, String[] names) {
 		boolean isDirected;
 		Graph g = null;
 		if(lines.get(0) == "#gerichtet")
@@ -66,8 +63,7 @@ public class Factory {
 			}
 			g.addEdge(v1, v2);
 			for(int j = 2; j < splitLine.length; j++) {
-				String splitAttr[] = splitLine[j].split(" ");
-				g.setAtE(v1, v2, splitAttr[0], Integer.parseInt(splitAttr[1]));
+				g.setAtE(v1, v2, names[j-2], Integer.parseInt(splitLine[j]));
 			}
 			if(isDirected == false) {
 				g.addEdge(v2, v1);

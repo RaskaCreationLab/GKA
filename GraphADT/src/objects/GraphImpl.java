@@ -146,7 +146,6 @@ public class GraphImpl implements Graph{
 			File file = new File(System.getProperty("user.dir")+"\\"+filename+".graph");
 			
 			FileWriter fw = new FileWriter(file.getAbsolutePath());
-			System.out.println(file.getAbsolutePath());
 			BufferedWriter bw = new BufferedWriter(fw);
 
 			bw.write("#gerichtet");
@@ -159,7 +158,7 @@ public class GraphImpl implements Graph{
 				int sIndex = vertexList.indexOf(sVertex);
 				int tIndex = vertexList.indexOf(tVertex);
 				for(Map.Entry<String, Integer> entry: edgeAttrMatrix.get(sIndex).get(tIndex).entrySet()) {
-					line = line.concat(","+entry.getKey()+" "+entry.getValue());
+					line = line.concat(","+entry.getValue());
 				}
 				bw.write(line);
 				
