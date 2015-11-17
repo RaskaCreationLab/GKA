@@ -22,6 +22,7 @@ public class Factory {
 	}
 	
 	public static Graph importG(String filename) {
+		System.out.println(getDirectory());
 		ArrayList<String> lines = new ArrayList<String>();
 		try (BufferedReader br = new BufferedReader(new FileReader(getDirectory()+ "\\" +filename+".graph")))
 		{
@@ -43,12 +44,12 @@ public class Factory {
 	static Graph importCreateG(ArrayList<String> lines, ArrayList<String> names) {
 		boolean isDirected;
 		Graph g = null;
-		if(lines.get(0) == "#gerichtet")
-			isDirected = true;
-		else if(lines.get(0) == "#ungerichtet")
-			isDirected = false;
-		else 
-			return g;
+//		if(lines.get(0) == "#gerichtet")
+//			isDirected = true;
+//		else if(lines.get(0) == "#ungerichtet")
+//			isDirected = false;
+//		else 
+//			return g;
 	
 		for (int i = 1; i < lines.size(); i++) {
 			String splitLine[] = lines.get(i).split(",");
@@ -65,12 +66,12 @@ public class Factory {
 			for(int j = 2; j < splitLine.length; j++) {
 				g.setAtE(v1, v2, names.get(j-2), Integer.parseInt(splitLine[j]));
 			}
-			if(isDirected == false) {
-				g.addEdge(v2, v1);
-				for(int j = 2; j < splitLine.length; j++) {
-					g.setAtE(v2, v1, names.get(j-2), Integer.parseInt(splitLine[j]));
-				}
-			}
+//			if(isDirected == false) {
+//				g.addEdge(v2, v1);
+//				for(int j = 2; j < splitLine.length; j++) {
+//					g.setAtE(v2, v1, names.get(j-2), Integer.parseInt(splitLine[j]));
+//				}
+//			}
 		}
 		return g;
 	}

@@ -17,7 +17,8 @@ public class FactoryTest {
 	@Test
 	public void testCreateV() {
 		//mit getName() wird der angegebene Name bei der Kreation zurückgegeben
-		assertEquals("Hamburg", Factory.createV("Hamburg").getName());
+		assertEquals("Hamburg", Factory.createV("Hamburg").getName
+				());
 		assertEquals("haha,no", Factory.createV("haha,no").getName());
 		//Sonderzeichen werden akzeptiert
 		assertEquals("hehe$", Factory.createV("hehe$").getName());
