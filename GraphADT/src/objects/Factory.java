@@ -13,6 +13,10 @@ public class Factory {
 		return System.getProperty("user.dir");
 	}
 	
+	public static void setAttrNames(ArrayList<String> names) {
+		attrNames = names;
+	}
+	
 	public static Vertex createV(String name) {
 		return VertexImpl.valueOf(name);
 	}
@@ -43,9 +47,9 @@ public class Factory {
 	static Graph importCreateG(ArrayList<String> lines, ArrayList<String> names) {
 		boolean isDirected;
 		Graph g = null;
-		if(lines.get(0) == "#gerichtet")
+		if(lines.get(0).equals("#gerichtet"))
 			isDirected = true;
-		else if(lines.get(0) == "#ungerichtet")
+		else if(lines.get(0).equals("#ungerichtet"))
 			isDirected = false;
 		else 
 			return g;

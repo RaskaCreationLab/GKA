@@ -1,0 +1,3 @@
+graph_eigener - von 's' nach 'd' 
+Zeit in ms: 0
+Weg: s, x, y, d
