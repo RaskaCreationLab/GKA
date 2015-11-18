@@ -148,21 +148,21 @@ public class UtilityTest2 {
 		
 		System.out.println("Zugriffversuch 1g");
 		
-		System.out.println(Utility2.floydW_accesses_exakt(g,v1,v5,0));
-		System.out.println(Utility2.floydW_accesses_exakt(g,v1,v5,1));
-		System.out.println(Utility2.floydW_accesses_exakt(g,v1,v5,2));
+		System.out.println(Utility2.floydW_accesses_exact(g,v1,v5,0));
+		System.out.println(Utility2.floydW_accesses_exact(g,v1,v5,1));
+		System.out.println(Utility2.floydW_accesses_exact(g,v1,v5,2));
 
 		System.out.println("Zugriffversuch 2g");
 		
-		System.out.println(Utility2.floydW_accesses_exakt(g,v2,v6,3));
+		System.out.println(Utility2.floydW_accesses_exact(g,v2,v6,3));
 		
 		//Versuchsaufbau
 		System.out.println("Versuch u - s");
 		
-		System.out.println(Utility2.floydW_accesses_exakt(z,vertexList.get(1),vertexList.get(0),0));
-		System.out.println(Utility2.floydW_accesses_exakt(z,vertexList.get(1),vertexList.get(0),1));
-		System.out.println(Utility2.floydW_accesses_exakt(z,vertexList.get(1),vertexList.get(0),2));
-		System.out.println(Utility2.floydW_accesses_exakt(z,vertexList.get(1),vertexList.get(0),3));
+		System.out.println(Utility2.floydW_accesses_exact(z,vertexList.get(1),vertexList.get(0),0));
+		System.out.println(Utility2.floydW_accesses_exact(z,vertexList.get(1),vertexList.get(0),1));
+		System.out.println(Utility2.floydW_accesses_exact(z,vertexList.get(1),vertexList.get(0),2));
+		System.out.println(Utility2.floydW_accesses_exact(z,vertexList.get(1),vertexList.get(0),3));
 		
 		System.out.println(Utility2.floydW_runtime_exact(z,vertexList.get(1),vertexList.get(0),"all"));
 		System.out.println(Utility2.floydW_runtime_exact(z,vertexList.get(1),vertexList.get(0),"init"));
@@ -174,7 +174,7 @@ public class UtilityTest2 {
 		System.out.println("Versuch graph_04");
 		
 		System.out.println(Utility2.floydW_accesses(y,vertexList2.get(0),vertexList2.get(8)));
-		System.out.println(Utility2.floydW_accesses_exakt(y,vertexList2.get(0),vertexList2.get(8),1));
+		System.out.println(Utility2.floydW_accesses_exact(y,vertexList2.get(0),vertexList2.get(8),1));
 		
 		System.out.println(Utility2.floydW_runtime(y,vertexList2.get(0),vertexList2.get(8)));
 		System.out.println(Utility2.floydW_runtime_exact(y,vertexList2.get(0),vertexList2.get(8),"all"));
@@ -182,7 +182,7 @@ public class UtilityTest2 {
 		System.out.println("Versuch graph_06");
 
 		System.out.println(Utility2.floydW_accesses(x,vertexList3.get(0),vertexList3.get(8)));
-		System.out.println(Utility2.floydW_accesses_exakt(x,vertexList3.get(0),vertexList3.get(8),1));
+		System.out.println(Utility2.floydW_accesses_exact(x,vertexList3.get(0),vertexList3.get(8),1));
 		
 		System.out.println(Utility2.floydW_runtime(x,vertexList3.get(0),vertexList3.get(8)));
 		System.out.println(Utility2.floydW_runtime_exact(x,vertexList3.get(0),vertexList3.get(8),"all"));

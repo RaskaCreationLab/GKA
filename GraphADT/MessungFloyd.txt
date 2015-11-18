@@ -1,0 +1,48 @@
+
+graph_eigener - von s nach d
+Weg: s, x, y, d
+Zugriffe insgesamt: 9448
+Lesezugriffe: 5515
+Schreibezugriffe: 3933
+Zugriffe auf GraphADT: 38
+Zeit der Matrixanfangsinitialisierung: 38292 ns
+Zeit der Initialisierung durch Kanten: 53687 ns
+Zeit der gesamten Initialisierung: 91979 ns
+Zeit des Algorithmus: 500157 ns
+graph_03 - von u nach s
+Weg: u, x, y, s
+Zugriffe insgesamt: 1169
+Lesezugriffe: 664
+Schreibezugriffe: 505
+Zugriffe auf GraphADT: 19
+Zeit der Matrixanfangsinitialisierung: 10264 ns
+Zeit der Initialisierung durch Kanten: 15790 ns
+Zeit der gesamten Initialisierung: 26054 ns
+Zeit des Algorithmus: 74609 ns
+graph_04 - von v5 nach v9
+Weg: kein Weg gefund
+Negativen Kreis gefunden
+Zeit der Matrixanfangsinitialisierung: 26054 ns
+Zeit der Initialisierung durch Kanten: 47765 ns
+Zeit der gesamten Initialisierung: 73819 ns
+Zeit des Algorithmus: -1189400 ns
+graph_06 - von v1 nach v9
+Weg: v1, v4, v6, v7, v8, v9
+Zugriffe insgesamt: 6837
+Lesezugriffe: 3971
+Schreibezugriffe: 2866
+Zugriffe auf GraphADT: 28
+Zeit der Matrixanfangsinitialisierung: 20527 ns
+Zeit der Initialisierung durch Kanten: 10264 ns
+Zeit der gesamten Initialisierung: 30791 ns
+Zeit des Algorithmus: 464233 ns
+graph_06 - von v9 nach v9
+Weg: v9
+Zugriffe insgesamt: 6822
+Lesezugriffe: 3962
+Schreibezugriffe: 2860
+Zugriffe auf GraphADT: 28
+Zeit der Matrixanfangsinitialisierung: 31581 ns
+Zeit der Initialisierung durch Kanten: 24475 ns
+Zeit der gesamten Initialisierung: 56056 ns
+Zeit des Algorithmus: 625688 ns

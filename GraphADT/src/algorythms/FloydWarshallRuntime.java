@@ -150,6 +150,7 @@ public class FloydWarshallRuntime {
 			timeList.add(initializeStart);
 			timeList.add(initializeEnd);
 			timeList.add(initializeFromGraphStart);
+			timeList.add(initializeFromGraphEnd);
 			timeList.add(algorythmStart);
 			timeList.add(algorythmEnd);
 			return timeList;
