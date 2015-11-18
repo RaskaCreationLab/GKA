@@ -1,3 +1,25 @@
-graph_eigener - von 's' nach 'd' 
+graph_eigener - von s nach d
 Zeit in ms: 0
 Weg: s, x, y, d
+Zugriffe: Graph lesen: 1503; lesen: 1880; schreiben: 971
+
+graph_03 - von u nach s
+Zeit in ms: 0
+Weg: u, x, y, s
+Zugriffe: Graph lesen: 383; lesen: 485; schreiben: 257
+
+graph_04 - von v5 nach v9
+Zeit in ms: 0
+Weg: kein Weg gefund
+Zugriffe: Graph lesen: 1006; lesen: 1288; schreiben: 819
+
+graph_06 - von v1 nach v9
+Zeit in ms: 0
+Weg: v1, v4, v6, v7, v8, v9
+Zugriffe: Graph lesen: 887; lesen: 1087; schreiben: 575
+
+graph_06 - von v9 nach v9
+Zeit in ms: 0
+Weg: v9
+Zugriffe: Graph lesen: 882; lesen: 1072; schreiben: 547
+
