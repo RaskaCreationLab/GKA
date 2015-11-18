@@ -1,4 +1,4 @@
-package algorythms;
+package algorithms;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import objects.Factory;
 import objects.Graph;
-import objects.Utility;
 import objects.Vertex;
 
 public class Utility2 {

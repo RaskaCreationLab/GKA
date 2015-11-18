@@ -1,10 +1,14 @@
-package objects;
+package algorithms;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import objects.Factory;
+import objects.Graph;
+import objects.Vertex;
 
 
 public class UtilityTest {

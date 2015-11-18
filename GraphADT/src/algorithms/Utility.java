@@ -1,4 +1,4 @@
-package objects;
+package algorithms;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,7 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
+
+import objects.Factory;
+import objects.Graph;
+import objects.Vertex;
 
 public class Utility {
 	public static ArrayList<Vertex> bellf(Graph graph, Vertex start, Vertex destination) {
@@ -75,9 +78,9 @@ public class Utility {
 	}
 	
 	public static long bellf_runtime(Graph graph, Vertex start, Vertex destination) {
-		long starttime = System.currentTimeMillis();
+		long starttime = System.nanoTime();
 		bellf(graph, start, destination);
-		return System.currentTimeMillis() - starttime;
+		return System.nanoTime() - starttime;
 	}
 	
 	//returns an Array with access-counts: read-access on graph, read access in general, write access in general
@@ -201,11 +204,12 @@ public class Utility {
 			Factory.setAttrNames(names);
 			for(int i = 0; i < fileNameOfGraph.length; i++){
 				bw.write(""+fileNameOfGraph[i]+" - von "+start[i]+" nach "+destination[i]+"\r\n");
+				bw.write("Bellman-Ford:\r\n");
 				Graph g3 = Factory.importG(fileNameOfGraph[i]);
 				ArrayList<Vertex> path = Utility.bellf(g3, Factory.createV(start[i]), Factory.createV(destination[i]));
 				long zeit = Utility.bellf_runtime(g3, Factory.createV(start[i]), Factory.createV(destination[i]));
 				int[] x = bellf_access(g3, Factory.createV(start[i]), Factory.createV(destination[i]));
-				bw.write("Zeit in ms: " + zeit + "\r\n");
+				bw.write("Zeit in ns: " + zeit + "\r\n");
 				String weg = new String("Weg: ");
 				if(path == null) {
 					weg = weg.concat("kein Weg gefunden");
@@ -216,10 +220,85 @@ public class Utility {
 				}
 				bw.write(weg.substring(0, weg.length() - 2));
 				bw.write("\r\nZugriffe: Graph lesen: "+ x[0]+"; lesen: "+ x[1]+"; schreiben: "+ x[2]+"\r\n\r\n");
-				
+				bw.write("Floyd-Warshall:\r\n");
+				bw.write("Zeit in ns: "+floydW_runtime(g3, Factory.createV(start[i]), Factory.createV(destination[i])));
+				bw.write(floydW_accesses_exact(g3, Factory.createV(start[i]), Factory.createV(destination[i]),4));
+				bw.write("-----\r\n\r\n");
 			}
 			bw.close();
 		} catch (IOException e) {}
+	}
+	
+	//floyd-Wahrshall
+	
+	public static ArrayList<Vertex> floydW(Graph graph, Vertex start, Vertex destination){
+		if(graph.getVertexes().contains(start) && graph.getVertexes().contains(destination)){
+			return FloydWarshallAlgo.algo(graph, start, destination);
+		}else{
+			return null;
+		}
+	}
+	
+	public static long floydW_runtime(Graph graph, Vertex start, Vertex destination){
+		long startTime = System.nanoTime();
+		FloydWarshallRuntime.algo(graph, start, destination);
+		long endTime = System.nanoTime();
+		return (endTime - startTime);
+	}
+	
+	public static String floydW_runtime_exact(Graph graph, Vertex start, Vertex destination, String time){
+		long startTime = System.nanoTime();
+		FloydWarshallRuntime.algo(graph, start, destination);
+		long endTime = System.nanoTime();
+				
+		long initS = FloydWarshallRuntime.getInitializeStart();
+		long initE = FloydWarshallRuntime.getInitializeEnd();
+		long initFS = FloydWarshallRuntime.getInitializeFromGraphStart();
+		long initFE = FloydWarshallRuntime.getInitializeFromGraphEnd();
+		long algS = FloydWarshallRuntime.getAlgorythmStart();
+		long algE = FloydWarshallRuntime.getAlgorythmEnd();
+		
+		if(time.equals("all")){	
+			return "Zeit " + ((endTime - startTime)/1000000)+ " ms";
+		} else if(time.equals("initM")){
+			return "Zeit der Matrixanfangsinitialisierung: " +(initE - initS)/1000000 +" ms";
+		} else if(time.equals("initFM")){
+			return "Zeit der Initialisierung durch Kanten: " + (initFE - initFS)/1000000 +" ms";
+		} else if(time.equals("algo")){
+			return "Zeit des Algorithmus: " + (algE - algS)/1000000 +" ms";
+		} else if(time.equals("init")){
+			return "Zeit der gesamten Initialisierung: "+((initE - initS)+(initFE - initFS))/1000000 +" ms";	
+		} else {
+			return ""+((algE - algS)+(initE - initS)+(initFE - initFS));
+			//"\r\nZeit der Matrixanfangsinitialisierung: " +(initE - initS) +" ns" + 
+			//"\r\nZeit der Initialisierung durch Kanten: " + (initFE - initFS) +" ns"+
+			//"\r\nZeit der gesamten Initialisierung: "+((initE - initS)+(initFE - initFS))+" ns"+
+			//"\r\nZeit des Algorithmus: " + (algE - algS)+" ns";
+		}
+	}
+	
+	public static int floydW_accesses(Graph graph, Vertex start, Vertex destination){
+		ArrayList<Integer> r = FloydWarshallAccesses.algo(graph,start,destination);
+		if(r == null){
+			return -1;
+		}
+		return r.get(0)+r.get(1)+r.get(2);
+	}
+	
+	public static String floydW_accesses_exact(Graph graph, Vertex start, Vertex destination, int counter){
+		ArrayList<Integer> r = FloydWarshallAccesses.algo(graph,start,destination);
+		if(r == null){
+			return "\r\nNegativen Kreis gefunden\r\n\r\n";
+		}
+		if(counter == 0){
+			return "Lesezugriffe: "+ r.get(0);
+		} else if(counter == 1){
+			return "Schreibezugriffe: "+r.get(1);
+		} else if(counter == 2){
+			return "Zugriffe auf GraphADT: "+r.get(2);
+		} else {
+			return "\r\nZugriffe: Graph lesen: "+ r.get(2) +"; lesen: "+ r.get(0) +"; schreiben: "+ r.get(1) +"\r\n\r\n";
+		}
 	}
 	
 	public static void main(String[] args) {

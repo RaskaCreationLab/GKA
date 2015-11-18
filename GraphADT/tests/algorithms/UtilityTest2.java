@@ -1,14 +1,12 @@
-package algorythms;
-
-import static org.junit.Assert.*;
+package algorithms;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
 
+import algorithms.Utility2;
 import objects.Factory;
 import objects.Graph;
-import objects.Utility;
 import objects.Vertex;
 
 public class UtilityTest2 {
@@ -16,14 +14,14 @@ public class UtilityTest2 {
 	Vertex v2 = Factory.createV("zwei");
 	Vertex v3 = Factory.createV("drei");
 	Vertex v4 = Factory.createV("vier");
-	Vertex v5 = Factory.createV("fünf");
+	Vertex v5 = Factory.createV("fï¿½nf");
 	Vertex v6 = Factory.createV("sechs");
 	Vertex v7 = Factory.createV("sieben");
 	Vertex v8 = Factory.createV("acht");
 	Vertex v9 = Factory.createV("neun");
 	Vertex v10 = Factory.createV("zehn");
 	Vertex v11 = Factory.createV("elf");
-	Vertex v12 = Factory.createV("zwölf");
+	Vertex v12 = Factory.createV("zwï¿½lf");
 	Vertex v13 = Factory.createV("13");
 	Vertex v14 = Factory.createV("14");
 
@@ -50,9 +48,9 @@ public class UtilityTest2 {
 //		Graph h = Factory.importG("graph_02");
 //		ArrayList<Vertex> vertexList2 = h.getVertexes();
 		
-		//Eigener Graph durch Befüllung
+		//Eigener Graph durch Befï¿½llung
 		Graph g = Factory.createG(v1);
-		//Befüllung
+		//Befï¿½llung
 		g.addVertex(v2);
 		g.addVertex(v3);
 		g.addVertex(v4);
@@ -134,7 +132,7 @@ public class UtilityTest2 {
 		System.out.println("Versuch3");
 		System.out.println(Utility2.floydW_runtime_exact(g,v1,v7,"all"));
 		
-//		System.out.println("Großer Graph1");
+//		System.out.println("Groï¿½er Graph1");
 //		
 //		Vertex l1 = h.getVertexes().get(1);
 //		Vertex l2 = h.getVertexes().get(20);
@@ -194,7 +192,7 @@ public class UtilityTest2 {
 		
 		
 //		[17:46:23] Mr.Lowbob: graph_03 (ist relativ klein) von u zu s
-//		[17:46:37] Mr.Lowbob: graph_04 als test für negativen kreis
+//		[17:46:37] Mr.Lowbob: graph_04 als test fï¿½r negativen kreis
 //		[17:47:08] Mr.Lowbob: graph_06 ohne negative kreise aber mit negativen kanten von v1 zu v9
 		
 		

@@ -1,25 +1,60 @@
 graph_eigener - von s nach d
-Zeit in ms: 0
+Bellman-Ford:
+Zeit in ns: 14366829
 Weg: s, x, y, d
 Zugriffe: Graph lesen: 1503; lesen: 1880; schreiben: 971
 
+Floyd-Warshall:
+Zeit in ns: 5798682
+Zugriffe: Graph lesen: 38; lesen: 5515; schreiben: 3933
+
+-----
+
 graph_03 - von u nach s
-Zeit in ms: 0
+Bellman-Ford:
+Zeit in ns: 185890
 Weg: u, x, y, s
 Zugriffe: Graph lesen: 383; lesen: 485; schreiben: 257
 
+Floyd-Warshall:
+Zeit in ns: 178093
+Zugriffe: Graph lesen: 19; lesen: 664; schreiben: 505
+
+-----
+
 graph_04 - von v5 nach v9
-Zeit in ms: 0
+Bellman-Ford:
+Zeit in ns: 760382
 Weg: kein Weg gefund
 Zugriffe: Graph lesen: 1006; lesen: 1288; schreiben: 819
 
+Floyd-Warshall:
+Zeit in ns: 233491
+Negativen Kreis gefunden
+
+-----
+
 graph_06 - von v1 nach v9
-Zeit in ms: 0
+Bellman-Ford:
+Zeit in ns: 547409
 Weg: v1, v4, v6, v7, v8, v9
 Zugriffe: Graph lesen: 887; lesen: 1087; schreiben: 575
 
+Floyd-Warshall:
+Zeit in ns: 811265
+Zugriffe: Graph lesen: 28; lesen: 3971; schreiben: 2866
+
+-----
+
 graph_06 - von v9 nach v9
-Zeit in ms: 0
+Bellman-Ford:
+Zeit in ns: 404197
 Weg: v9
 Zugriffe: Graph lesen: 882; lesen: 1072; schreiben: 547
+
+Floyd-Warshall:
+Zeit in ns: 851480
+Zugriffe: Graph lesen: 28; lesen: 3962; schreiben: 2860
+
+-----
 

@@ -1,16 +1,15 @@
-package algorythms;
+package algorithms;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import objects.Graph;
 import objects.Vertex;
 
 public class FloydWarshallAlgo {
-	// Distanzmatrix: Kürzester Weg von v1 zu v2
+	// Distanzmatrix: Kï¿½rzester Weg von v1 zu v2
 	public static ArrayList<ArrayList<Integer>> dmat = new ArrayList<ArrayList<Integer>>();
-	// Transitmatrix: Höchste Ecke auf dem Weg
+	// Transitmatrix: Hï¿½chste Ecke auf dem Weg
 	public static ArrayList<ArrayList<Integer>> tmat = new ArrayList<ArrayList<Integer>>();
 	// Errorwert & Maxwert
 	static int MAX_VALUE = 99999999;
@@ -70,9 +69,9 @@ public class FloydWarshallAlgo {
 						int dik = dmat.get(i).get(k);
 						int dijk = dmat.get(i).get(j) + dmat.get(j).get(k);
 						int min = dik > dijk ? dijk : dik;
-						//Setzung des Minwerts für schnelleren Weg
+						//Setzung des Minwerts fï¿½r schnelleren Weg
 						dmat.get(i).set(k,min);
-						//Änderung von tmat
+						//ï¿½nderung von tmat
 						int newDik = dmat.get(i).get(k);
 						if(dik != newDik){
 							tmat.get(i).set(k,j);
