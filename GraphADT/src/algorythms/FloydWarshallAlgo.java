@@ -16,7 +16,7 @@ public class FloydWarshallAlgo {
 	static int MAX_VALUE = 99999999;
 	static int ERROR_VALUE = -999999999;
 
-	public FloydWarshallAlgo() {}
+	public FloydWarshallAlgo(){}
 
 	public static void initializeMatrixes(Graph alGraph, ArrayList<Vertex> vertexList){
 		dmat.clear();
@@ -85,10 +85,12 @@ public class FloydWarshallAlgo {
 				}
 			}
 		}
+		//Berechnung des schnellsten Weges
 		ArrayList<Vertex> resultList = new ArrayList<Vertex>();
 		Vertex tmp = destination;
 		int startIndex = vertexList.indexOf(start);
 		int tmpIndex = vertexList.indexOf(tmp);
+		//Durchgang durch die tmat zur Findung des schnellten Weges
 		do{
 			resultList.add(tmp);
 			int predecessorIndex = tmat.get(startIndex).get(tmpIndex);
@@ -101,8 +103,18 @@ public class FloydWarshallAlgo {
 		}
 		while(tmp != start);
 		resultList.add(start);
-		Collections.reverse(resultList);
 		
+		if(resultList.size() == 2){
+			Vertex r0 = resultList.get(0);
+			Vertex r1 = resultList.get(1);
+			int r01 = vertexList.indexOf(r0);
+			int r10 = vertexList.indexOf(r1);
+			if(r01 == r10 && dmat.get(r01).get(r10) != 0){
+				return null;
+			}
+		}
+		//Umdrehen um die Reihenfolge von Start zu Destination zu haben
+		Collections.reverse(resultList);
 		return resultList;
 	}
 }

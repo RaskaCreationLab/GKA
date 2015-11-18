@@ -53,6 +53,7 @@ public class FloydWarshallRuntime {
 
 		public FloydWarshallRuntime() {}
 
+		//Initialisierung der Matrizen über die Vertexlist
 		public static void initializeMatrixes(Graph alGraph, ArrayList<Vertex> vertexList){
 			initializeStart = System.nanoTime();
 			dmat.clear();
@@ -68,13 +69,14 @@ public class FloydWarshallRuntime {
 					} else {
 						dmat.get(j).add(MAX_VALUE);
 					}
+					//Setzung auf -1 um Indexproblemen entgegenzukommen
 					tmat.get(j).add(-1);
 				}
 			}
 			initializeEnd = System.nanoTime();
 		}
 		
-		// Initialisierung
+		// Initialisierung der dmat durch die Werte der Kanten
 		public static void initializeFromGraph(Graph graph, ArrayList<Vertex> vertexList) {
 			initializeMatrixes(graph,vertexList);
 			initializeFromGraphStart = System.nanoTime();
@@ -129,6 +131,7 @@ public class FloydWarshallRuntime {
 			Vertex tmp = destination;
 			int startIndex = vertexList.indexOf(start);
 			int tmpIndex = vertexList.indexOf(tmp);
+			//Durchgang durch die tmat zur Findung des schnellten Weges
 			do{
 				resultList.add(tmp);
 				int predecessorIndex = tmat.get(startIndex).get(tmpIndex);

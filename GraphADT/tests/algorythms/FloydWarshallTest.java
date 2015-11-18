@@ -61,7 +61,6 @@ public class FloydWarshallTest {
 		r.add(v1);
 		r.add(v2);
 		assertEquals(r, FloydWarshallAlgo.algo(h, v4, v2));
-		System.out.println("Horst");
 		
 		Graph g = Factory.createG(v1);
 		//Befüllung
@@ -141,6 +140,9 @@ public class FloydWarshallTest {
 		
 		assertEquals(result, FloydWarshallAlgo.algo(g, v1, v10));
 		
+		g.addEdge(v2,v2);
+		g.setAtE(v2, v2, "cost", 0);
+		
 		result.clear();
 		result.add(v2);
 		result.add(v2);
@@ -153,6 +155,9 @@ public class FloydWarshallTest {
 		result.add(v12);
 		
 		assertEquals(result,FloydWarshallAlgo.algo(g, v2, v12));
+		assertEquals(null,FloydWarshallAlgo.algo(g,v7,v8));
+		
+		result.clear();
 		
 		Graph g2 = Factory.createG(v1);
 		g2.addVertex(v2);
@@ -168,13 +173,23 @@ public class FloydWarshallTest {
 		g2.addEdge(v5, v1);
 		g2.addEdge(v5, v6);
 		
-		g.setAtE(v1, v2, "cost", -1);
-		g.setAtE(v2, v3, "cost", -2);
-		g.setAtE(v3, v7, "cost", -3);
-		g.setAtE(v7, v2, "cost", -4);
-		g.setAtE(v7, v1, "cost", -4);
-		g.setAtE(v2, v10, "cost", -4);
+		g2.setAtE(v1, v2, "cost", -1);
+		g2.setAtE(v2, v3, "cost", -2);
+		g2.setAtE(v3, v7, "cost", -3);
+		g2.setAtE(v7, v2, "cost", -4);
+		g2.setAtE(v7, v1, "cost", -4);
+		g2.setAtE(v2, v10, "cost", -4);
 		
-		assertEquals(null,FloydWarshallAlgo.algo(g, v1, v4));
+		result.add(v1);
+		result.add(v2);
+		result.add(v3);
+		result.add(v4);
+
+		assertEquals(result,FloydWarshallAlgo.algo(g2,v1,v4));
+		//Vertex nicht vorhanden -> null
+		result.clear();
+		assertEquals(null, FloydWarshallAlgo.algo(g2,v2,v7));
+		assertEquals(null, FloydWarshallAlgo.algo(g2,v6,v1));
+		
 	}
 }

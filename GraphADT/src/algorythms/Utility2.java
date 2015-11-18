@@ -7,7 +7,11 @@ import objects.Vertex;
 
 public class Utility2 {
 	public static ArrayList<Vertex> floydW(Graph graph, Vertex start, Vertex destination){
-		return FloydWarshallAlgo.algo(graph, start, destination);
+		if(graph.getVertexes().contains(start) && graph.getVertexes().contains(destination)){
+			return FloydWarshallAlgo.algo(graph, start, destination);
+		}else{
+			return null;
+		}
 	}
 	
 	public static long floydW_runtime(Graph graph, Vertex start, Vertex destination){
